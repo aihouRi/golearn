@@ -2,11 +2,11 @@ package render
 
 import (
 	"bytes"
+	"github.com/aihouRi/golearn/pkg/config"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
-	"github.com/aihouRi/golearn/pkg/config"
 )
 
 // Newtemplates sets the config for the template package
@@ -20,11 +20,15 @@ func NewTemplates(a *config.Appconfig) {
 
 // RenderTemplate renders templates using html/template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
+	var tc map[string]*template.Template
+	if app.UseCache {
+		//get the template cache from the app config
+		tc = app.TemplateCache
+		
+	} else {
+		tc, _ = CreateTemplateCache()
+	}
 
-	//get the template cache from the app config
-	tc := app.TemplateCache
-
-	//get requested template from cache
 	t, ok := tc[tmpl]
 	if !ok {
 		log.Fatal("Could not get template from template cache")
