@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/aihouRi/golearn/pkg/config"
+	"github.com/aihouRi/golearn/pkg/models"
 	"github.com/aihouRi/golearn/pkg/render"
 )
 
@@ -29,10 +30,14 @@ func NewHandlers(r *Repository) {
 
 // Home is a home page handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl")
+	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
 // About is a about page handler
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl")
+	StringMap := make(map[string]string)
+	StringMap["test"] = "Hello, again."
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
+		StringMap: StringMap,
+	})
 }
